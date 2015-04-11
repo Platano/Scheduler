@@ -42,13 +42,13 @@ public class JFrame extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButton1)
-                .addGap(0, 943, Short.MAX_VALUE))
+                .addGap(0, 969, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButton1)
-                .addGap(0, 490, Short.MAX_VALUE))
+                .addGap(0, 745, Short.MAX_VALUE))
         );
 
         pack();
