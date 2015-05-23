@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Date;
+import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -31,6 +32,8 @@ public class JFrame extends javax.swing.JFrame {
      */
     public JFrame() {
         initComponents();
+        ArrayList<JCheckBox> checkedDays = createBoxArray();
+
         jTable1.setRowHeight(jTable1.getRowHeight() + 3);
         jTable1.addMouseListener(new MouseAdapter() {
             @Override
@@ -39,10 +42,22 @@ public class JFrame extends javax.swing.JFrame {
                 Point p = me.getPoint();
                 int row = table.rowAtPoint(p);
                 if (me.getClickCount() == 2) {
-
                     empPopup.setVisible(true);
+                    int currDay = 1;
+                    ArrayList<Integer> l = new ArrayList();
+                    for (JCheckBox checkedDay : checkedDays) {
+                        if (checkedDay.isSelected())
+                            l.add(checkedDays.indexOf(checkedDay));
+                        checkedDay.setSelected(false);
+
+                    }
+
+                    
+                    
                     WorkDay one = new WorkDay(startTime.getText() + "-" + endTime.getText(), campusDrop.getSelectedItem().toString());
-                    populateRow(jTable1, row, one);
+                    populateRow(jTable1, row, one, l);
+                    startTime.setText(null);
+                    endTime.setText(null);
 
                 }
 
@@ -61,13 +76,13 @@ public class JFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         empPopup = new javax.swing.JDialog();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox7 = new javax.swing.JCheckBox();
+        box1 = new javax.swing.JCheckBox();
+        box2 = new javax.swing.JCheckBox();
+        box3 = new javax.swing.JCheckBox();
+        box4 = new javax.swing.JCheckBox();
+        box5 = new javax.swing.JCheckBox();
+        box6 = new javax.swing.JCheckBox();
+        box7 = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -95,30 +110,35 @@ public class JFrame extends javax.swing.JFrame {
         empPopup.setMinimumSize(new java.awt.Dimension(385, 220));
         empPopup.setModal(true);
 
-        jCheckBox1.setText("Sun");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        box1.setText("Sun");
+        box1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                box1ActionPerformed(evt);
             }
         });
 
-        jCheckBox2.setText("Mon");
+        box2.setText("Mon");
 
-        jCheckBox3.setText("Tue");
+        box3.setText("Tue");
 
-        jCheckBox4.setText("Wed");
+        box4.setText("Wed");
 
-        jCheckBox5.setText("Thu");
+        box5.setText("Thu");
 
-        jCheckBox6.setText("Fri");
+        box6.setText("Fri");
 
-        jCheckBox7.setText("Sat");
+        box7.setText("Sat");
 
         jLabel1.setText("Start:");
 
         jLabel2.setText("Finish:");
 
         jButton1.setText("Submit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Campus:");
 
@@ -134,19 +154,19 @@ public class JFrame extends javax.swing.JFrame {
                         .addGap(14, 14, 14)
                         .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(empPopupLayout.createSequentialGroup()
-                                .addComponent(jCheckBox1)
+                                .addComponent(box1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox2)
+                                .addComponent(box2)
                                 .addGap(16, 16, 16)
-                                .addComponent(jCheckBox3)
+                                .addComponent(box3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox4)
+                                .addComponent(box4)
                                 .addGap(18, 18, 18)
-                                .addComponent(jCheckBox5)
+                                .addComponent(box5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox6)
+                                .addComponent(box6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jCheckBox7))
+                                .addComponent(box7))
                             .addGroup(empPopupLayout.createSequentialGroup()
                                 .addGap(50, 50, 50)
                                 .addComponent(jLabel1)
@@ -172,13 +192,13 @@ public class JFrame extends javax.swing.JFrame {
             .addGroup(empPopupLayout.createSequentialGroup()
                 .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jCheckBox4)
-                    .addComponent(jCheckBox5)
-                    .addComponent(jCheckBox6)
-                    .addComponent(jCheckBox7))
+                    .addComponent(box1)
+                    .addComponent(box2)
+                    .addComponent(box3)
+                    .addComponent(box4)
+                    .addComponent(box5)
+                    .addComponent(box6)
+                    .addComponent(box7))
                 .addGap(28, 28, 28)
                 .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -312,6 +332,18 @@ public class JFrame extends javax.swing.JFrame {
     private void jCalendarButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCalendarButton1ActionPerformed
 
     }//GEN-LAST:event_jCalendarButton1ActionPerformed
+    private ArrayList<JCheckBox> createBoxArray() {
+        ArrayList<JCheckBox> checkedDays = new ArrayList();
+        checkedDays.add(box1);
+        checkedDays.add(box2);
+        checkedDays.add(box3);
+        checkedDays.add(box4);
+        checkedDays.add(box5);
+        checkedDays.add(box6);
+        checkedDays.add(box7);
+
+        return checkedDays;
+    }
 
     public static Calendar DateToCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
@@ -319,9 +351,9 @@ public class JFrame extends javax.swing.JFrame {
         return cal;
     }
 
-    private void populateRow(JTable table, int rowID, WorkDay w) {
-        for (int i = 1; i < table.getColumnCount(); i++) {
-            table.setValueAt(w.time + " " + w.campus.substring(0, 1), rowID, i);
+    private void populateRow(JTable table, int rowID, WorkDay w, ArrayList<Integer> l) {
+        for (Integer l1 : l) {
+            table.setValueAt(w.time + " " + w.campus.substring(0, 4), rowID, l1+1);
         }
 
     }
@@ -334,7 +366,8 @@ public class JFrame extends javax.swing.JFrame {
             String DateToStr = format.format(evt.getNewValue());
             JTableHeader th = jTable1.getTableHeader();
             TableColumnModel tcm = th.getColumnModel();
-            System.out.println(jTable1.getColumnCount());
+
+            System.out.println(jTable1.getColumnCount()); //debugging
 
             jTable1.getColumnModel().getColumn(1).setHeaderValue((DateToStr));
             Date n = new Date(DateToStr);
@@ -362,9 +395,13 @@ public class JFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+    private void box1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_box1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    }//GEN-LAST:event_box1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        empPopup.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -404,18 +441,18 @@ public class JFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox box1;
+    private javax.swing.JCheckBox box2;
+    private javax.swing.JCheckBox box3;
+    private javax.swing.JCheckBox box4;
+    private javax.swing.JCheckBox box5;
+    private javax.swing.JCheckBox box6;
+    private javax.swing.JCheckBox box7;
     private javax.swing.JComboBox campusDrop;
     private javax.swing.JDialog empPopup;
     private javax.swing.JTextField endTime;
     private javax.swing.JButton jButton1;
     private org.jbundle.thin.base.screen.jcalendarbutton.JCalendarButton jCalendarButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
