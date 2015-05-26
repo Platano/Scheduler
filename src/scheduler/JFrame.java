@@ -96,6 +96,82 @@ public class JFrame extends javax.swing.JFrame
             }
         });
     }
+    private ArrayList<JCheckBox> createBoxArray()
+    {
+        ArrayList<JCheckBox> checkedDays = new ArrayList();
+        checkedDays.add(box1);
+        checkedDays.add(box2);
+        checkedDays.add(box3);
+        checkedDays.add(box4);
+        checkedDays.add(box5);
+        checkedDays.add(box6);
+        checkedDays.add(box7);
+
+        return checkedDays;
+    }
+
+    public static Calendar DateToCalendar(Date date)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
+    }
+
+    private void populateRow(JTable table, int rowID, WorkDay w, ArrayList<Integer> l)
+    {
+        for (Integer l1 : l)
+        {
+            table.setValueAt(w.time + " " + w.campus.substring(0, 4), rowID, l1 + 1);
+        }
+
+    }
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[])
+    {
+
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex)
+        {
+            java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex)
+        {
+            java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex)
+        {
+            java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
+            java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+
+                new JFrame().setVisible(true);
+            }
+        });
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -424,35 +500,7 @@ public class JFrame extends javax.swing.JFrame
     private void jCalendarButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCalendarButton1ActionPerformed
 
     }//GEN-LAST:event_jCalendarButton1ActionPerformed
-    private ArrayList<JCheckBox> createBoxArray()
-    {
-        ArrayList<JCheckBox> checkedDays = new ArrayList();
-        checkedDays.add(box1);
-        checkedDays.add(box2);
-        checkedDays.add(box3);
-        checkedDays.add(box4);
-        checkedDays.add(box5);
-        checkedDays.add(box6);
-        checkedDays.add(box7);
 
-        return checkedDays;
-    }
-
-    public static Calendar DateToCalendar(Date date)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal;
-    }
-
-    private void populateRow(JTable table, int rowID, WorkDay w, ArrayList<Integer> l)
-    {
-        for (Integer l1 : l)
-        {
-            table.setValueAt(w.time + " " + w.campus.substring(0, 4), rowID, l1 + 1);
-        }
-
-    }
 
     private void jCalendarButton1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCalendarButton1PropertyChange
         if (evt.getNewValue() instanceof Date)
@@ -521,53 +569,6 @@ public class JFrame extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-
-                new JFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox box1;
