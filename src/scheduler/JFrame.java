@@ -25,45 +25,76 @@ import javax.swing.table.TableColumnModel;
  *
  * @author Jeff
  */
-public class JFrame extends javax.swing.JFrame {
+public class JFrame extends javax.swing.JFrame
+{
 
     /**
      * Creates new form JFrame
      */
-    public JFrame() {
+    public JFrame()
+    {
         initComponents();
         ArrayList<JCheckBox> checkedDays = createBoxArray();
 
         jTable1.setRowHeight(jTable1.getRowHeight() + 3);
-        jTable1.addMouseListener(new MouseAdapter() {
+        jTable1.addMouseListener(new MouseAdapter()
+        {
             @Override
-            public void mousePressed(MouseEvent me) {
+            public void mousePressed(MouseEvent me)
+            {
                 JTable table = (JTable) me.getSource();
                 Point p = me.getPoint();
                 int row = table.rowAtPoint(p);
-                if (me.getClickCount() == 2) {
+                if (me.getClickCount() == 2)
+                {
+                    empPopup.setTitle((String) jTable1.getValueAt(row, 0));
                     empPopup.setVisible(true);
-                    int currDay = 1;
                     ArrayList<Integer> l = new ArrayList();
-                    for (JCheckBox checkedDay : checkedDays) {
+                    for (JCheckBox checkedDay : checkedDays)
+                    {
                         if (checkedDay.isSelected())
                             l.add(checkedDays.indexOf(checkedDay));
                         checkedDay.setSelected(false);
-
                     }
-
                     
-                    
-                    WorkDay one = new WorkDay(startTime.getText() + "-" + endTime.getText(), campusDrop.getSelectedItem().toString());
+                     WorkDay one = null;    
+                    if (jCheckBox4.isSelected() && jCheckBox5.isSelected())
+                    {
+                       one = new WorkDay(jComboBox2.getSelectedItem().toString()
+                                + " P.M."
+                                + " - " + jComboBox3.getSelectedItem().toString()
+                                + " P.M. ", 
+                               campusDrop.getSelectedItem().toString());
+                    }
+                    if (jCheckBox4.isSelected() && !jCheckBox5.isSelected())
+                    {
+                        one = new WorkDay(jComboBox2.getSelectedItem().toString()
+                                + " P.M."
+                                + " - " + jComboBox3.getSelectedItem().toString()
+                                + " A.M. ", 
+                               campusDrop.getSelectedItem().toString());
+                    }
+                    if (!jCheckBox4.isSelected() && jCheckBox5.isSelected())
+                    {
+                        one = new WorkDay(jComboBox2.getSelectedItem().toString()
+                                + " A.M."
+                                + " - " + jComboBox3.getSelectedItem().toString()
+                                + " P.M. ", 
+                               campusDrop.getSelectedItem().toString());
+                    }
+                    if (!jCheckBox4.isSelected() && !jCheckBox5.isSelected())
+                    {
+                        one = new WorkDay(jComboBox2.getSelectedItem().toString()
+                                + " A.M."
+                                + " - " + jComboBox3.getSelectedItem().toString()
+                                + " A.M. ", 
+                               campusDrop.getSelectedItem().toString());
+                    }
                     populateRow(jTable1, row, one, l);
-                    startTime.setText(null);
-                    endTime.setText(null);
 
                 }
-
             }
         });
-
     }
 
     /**
@@ -73,7 +104,8 @@ public class JFrame extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         empPopup = new javax.swing.JDialog();
         box1 = new javax.swing.JCheckBox();
@@ -88,8 +120,11 @@ public class JFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         campusDrop = new javax.swing.JComboBox();
-        startTime = new javax.swing.JTextField();
-        endTime = new javax.swing.JTextField();
+        jComboBox2 = new javax.swing.JComboBox();
+        jComboBox3 = new javax.swing.JComboBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jCheckBox5 = new javax.swing.JCheckBox();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jProgressBar1 = new javax.swing.JProgressBar();
@@ -111,8 +146,10 @@ public class JFrame extends javax.swing.JFrame {
         empPopup.setModal(true);
 
         box1.setText("Sun");
-        box1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        box1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 box1ActionPerformed(evt);
             }
         });
@@ -134,8 +171,10 @@ public class JFrame extends javax.swing.JFrame {
         jLabel2.setText("Finish:");
 
         jButton1.setText("Submit");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -144,6 +183,42 @@ public class JFrame extends javax.swing.JFrame {
 
         campusDrop.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Academy", "Prepatory", "Miller", "Montgomery" }));
 
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00" }));
+        jComboBox3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jComboBox3ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox4.setText("P.M.");
+        jCheckBox4.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jCheckBox4ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox5.setText("P.M.");
+        jCheckBox5.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jCheckBox5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout empPopupLayout = new javax.swing.GroupLayout(empPopup.getContentPane());
         empPopup.getContentPane().setLayout(empPopupLayout);
         empPopupLayout.setHorizontalGroup(
@@ -151,46 +226,48 @@ public class JFrame extends javax.swing.JFrame {
             .addGroup(empPopupLayout.createSequentialGroup()
                 .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(empPopupLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(empPopupLayout.createSequentialGroup()
-                                .addComponent(box1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(box2)
-                                .addGap(16, 16, 16)
-                                .addComponent(box3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(box4)
-                                .addGap(18, 18, 18)
-                                .addComponent(box5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(box6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(box7))
-                            .addGroup(empPopupLayout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(empPopupLayout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(campusDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(empPopupLayout.createSequentialGroup()
-                                        .addComponent(startTime, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(16, 16, 16)
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(endTime, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(campusDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(empPopupLayout.createSequentialGroup()
                         .addGap(142, 142, 142)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1))
+                    .addGroup(empPopupLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(box1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(box2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(box3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(box4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(box5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(box6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(box7))
+                    .addGroup(empPopupLayout.createSequentialGroup()
+                        .addGap(106, 106, 106)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox5))
+                    .addGroup(empPopupLayout.createSequentialGroup()
+                        .addGap(109, 109, 109)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox4)))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         empPopupLayout.setVerticalGroup(
             empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(empPopupLayout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(box1)
                     .addComponent(box2)
@@ -199,25 +276,33 @@ public class JFrame extends javax.swing.JFrame {
                     .addComponent(box5)
                     .addComponent(box6)
                     .addComponent(box7))
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(startTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(endTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
                 .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(campusDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18))
         );
+
+        jCheckBox1.setText("jCheckBox1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTable1.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
                 {"Jose B.", null, null, null, null, null, null, null},
                 {"Anita G.", null, null, null, null, null, null, null},
                 {"Camilo C.", null, null, null, null, null, null, null},
@@ -236,15 +321,19 @@ public class JFrame extends javax.swing.JFrame {
                 {"Steven R", null, null, null, null, null, null, null},
                 {"Daniel", null, null, null, null, null, null, null}
             },
-            new String [] {
+            new String []
+            {
                 "Employees", "Day 1", "Day 2 ", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
@@ -252,13 +341,17 @@ public class JFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jCalendarButton1.setText("Date");
-        jCalendarButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jCalendarButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jCalendarButton1ActionPerformed(evt);
             }
         });
-        jCalendarButton1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+        jCalendarButton1.addPropertyChangeListener(new java.beans.PropertyChangeListener()
+        {
+            public void propertyChange(java.beans.PropertyChangeEvent evt)
+            {
                 jCalendarButton1PropertyChange(evt);
             }
         });
@@ -272,8 +365,10 @@ public class JFrame extends javax.swing.JFrame {
         jMenu1.add(jMenuItem2);
 
         jMenuItem3.setText("Open");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItem3ActionPerformed(evt);
             }
         });
@@ -311,7 +406,7 @@ public class JFrame extends javax.swing.JFrame {
                         .addContainerGap())
                     .addComponent(jScrollPane1)))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(432, Short.MAX_VALUE)
+                .addContainerGap(601, Short.MAX_VALUE)
                 .addComponent(jCalendarButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(414, 414, 414))
         );
@@ -321,7 +416,7 @@ public class JFrame extends javax.swing.JFrame {
                 .addComponent(jCalendarButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -332,7 +427,8 @@ public class JFrame extends javax.swing.JFrame {
     private void jCalendarButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCalendarButton1ActionPerformed
 
     }//GEN-LAST:event_jCalendarButton1ActionPerformed
-    private ArrayList<JCheckBox> createBoxArray() {
+    private ArrayList<JCheckBox> createBoxArray()
+    {
         ArrayList<JCheckBox> checkedDays = new ArrayList();
         checkedDays.add(box1);
         checkedDays.add(box2);
@@ -345,21 +441,25 @@ public class JFrame extends javax.swing.JFrame {
         return checkedDays;
     }
 
-    public static Calendar DateToCalendar(Date date) {
+    public static Calendar DateToCalendar(Date date)
+    {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;
     }
 
-    private void populateRow(JTable table, int rowID, WorkDay w, ArrayList<Integer> l) {
-        for (Integer l1 : l) {
-            table.setValueAt(w.time + " " + w.campus.substring(0, 4), rowID, l1+1);
+    private void populateRow(JTable table, int rowID, WorkDay w, ArrayList<Integer> l)
+    {
+        for (Integer l1 : l)
+        {
+            table.setValueAt(w.time + " " + w.campus.substring(0, 4), rowID, l1 + 1);
         }
 
     }
 
     private void jCalendarButton1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCalendarButton1PropertyChange
-        if (evt.getNewValue() instanceof Date) {
+        if (evt.getNewValue() instanceof Date)
+        {
 
             //formating the date
             SimpleDateFormat format = new SimpleDateFormat("EEE MM/dd/yyyy");
@@ -373,13 +473,15 @@ public class JFrame extends javax.swing.JFrame {
             Date n = new Date(DateToStr);
             Calendar tr = DateToCalendar(n);
             ArrayList<String> cals = new ArrayList();
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 6; i++)
+            {
                 tr.add(Calendar.DATE, 1);  //incrementing days by one
                 String newDate = format.format(tr.getTime());
                 cals.add(newDate);
             }
 
-            for (int i = 2; i < 8; i++) {
+            for (int i = 2; i < 8; i++)
+            {
                 TableColumn tc = tcm.getColumn(i);
                 tc.setHeaderValue(cals.get(i - 2));
             }
@@ -403,37 +505,67 @@ public class JFrame extends javax.swing.JFrame {
         empPopup.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jComboBox3ActionPerformed
+    {//GEN-HEADEREND:event_jComboBox3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox3ActionPerformed
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jCheckBox4ActionPerformed
+    {//GEN-HEADEREND:event_jCheckBox4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
+    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jCheckBox5ActionPerformed
+    {//GEN-HEADEREND:event_jCheckBox5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox5ActionPerformed
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jComboBox2ActionPerformed
+    {//GEN-HEADEREND:event_jComboBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
 
                 new JFrame().setVisible(true);
             }
@@ -450,9 +582,13 @@ public class JFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox box7;
     private javax.swing.JComboBox campusDrop;
     private javax.swing.JDialog empPopup;
-    private javax.swing.JTextField endTime;
     private javax.swing.JButton jButton1;
     private org.jbundle.thin.base.screen.jcalendarbutton.JCalendarButton jCalendarButton1;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -470,6 +606,5 @@ public class JFrame extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField startTime;
     // End of variables declaration//GEN-END:variables
 }
