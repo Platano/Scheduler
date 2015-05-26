@@ -8,6 +8,8 @@ package scheduler;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.Format;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
@@ -125,6 +129,30 @@ public class JFrame extends javax.swing.JFrame
         }
 
     }
+        public void saveTable() throws Exception {
+        BufferedWriter bfw = new BufferedWriter(new FileWriter("Data.csv"));
+        for (int i = 0; i < jTable1.getColumnCount(); i++) {
+            bfw.write((String) jTable1.getColumnModel().getColumn(i).getHeaderValue());
+            bfw.write(",");
+        }
+        
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            bfw.newLine();
+            for (int j = 0; j < jTable1.getColumnCount(); j++) {
+                if (jTable1.getValueAt(i, j) == null) {
+                    bfw.write(" ");
+                    bfw.write(",");
+                } else {
+                    bfw.write((String) jTable1.getValueAt(i, j));
+                    bfw.write(",");                    
+                }
+                
+            }
+        }
+        bfw.close();
+    }
+
+    
     
     /**
      * @param args the command line arguments
@@ -180,8 +208,7 @@ public class JFrame extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         empPopup = new javax.swing.JDialog();
         box1 = new javax.swing.JCheckBox();
@@ -221,10 +248,8 @@ public class JFrame extends javax.swing.JFrame
         empPopup.setModal(true);
 
         box1.setText("Sun");
-        box1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        box1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 box1ActionPerformed(evt);
             }
         });
@@ -246,10 +271,8 @@ public class JFrame extends javax.swing.JFrame
         jLabel2.setText("Finish:");
 
         jButton1.setText("Submit");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -259,37 +282,24 @@ public class JFrame extends javax.swing.JFrame
         campusDrop.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Academy", "Prepatory", "Miller", "Montgomery" }));
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                jComboBox2ActionPerformed(evt);
-            }
-        });
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00" }));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox3ActionPerformed(evt);
             }
         });
 
         jCheckBox4.setText("P.M.");
-        jCheckBox4.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox4ActionPerformed(evt);
             }
         });
 
         jCheckBox5.setText("P.M.");
-        jCheckBox5.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox5ActionPerformed(evt);
             }
         });
@@ -361,7 +371,7 @@ public class JFrame extends javax.swing.JFrame
                     .addComponent(jLabel2)
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBox5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(campusDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -374,8 +384,7 @@ public class JFrame extends javax.swing.JFrame
 
         jTable1.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {"Jose B.", null, null, null, null, null, null, null},
                 {"Anita G.", null, null, null, null, null, null, null},
                 {"Camilo C.", null, null, null, null, null, null, null},
@@ -394,19 +403,15 @@ public class JFrame extends javax.swing.JFrame
                 {"Steven R", null, null, null, null, null, null, null},
                 {"Daniel", null, null, null, null, null, null, null}
             },
-            new String []
-            {
+            new String [] {
                 "Employees", "Day 1", "Day 2 ", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"
             }
-        )
-        {
-            boolean[] canEdit = new boolean []
-            {
+        ) {
+            boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex)
-            {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
@@ -414,17 +419,13 @@ public class JFrame extends javax.swing.JFrame
         jScrollPane1.setViewportView(jTable1);
 
         jCalendarButton1.setText("Date");
-        jCalendarButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jCalendarButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCalendarButton1ActionPerformed(evt);
             }
         });
-        jCalendarButton1.addPropertyChangeListener(new java.beans.PropertyChangeListener()
-        {
-            public void propertyChange(java.beans.PropertyChangeEvent evt)
-            {
+        jCalendarButton1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 jCalendarButton1PropertyChange(evt);
             }
         });
@@ -435,13 +436,16 @@ public class JFrame extends javax.swing.JFrame
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Save");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         jMenuItem3.setText("Open");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
             }
         });
@@ -512,7 +516,7 @@ public class JFrame extends javax.swing.JFrame
             JTableHeader th = jTable1.getTableHeader();
             TableColumnModel tcm = th.getColumnModel();
 
-            System.out.println(jTable1.getColumnCount()); //debugging
+            
 
             jTable1.getColumnModel().getColumn(1).setHeaderValue((DateToStr));
             Date n = new Date(DateToStr);
@@ -565,10 +569,14 @@ public class JFrame extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox5ActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jComboBox2ActionPerformed
-    {//GEN-HEADEREND:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        try {
+            saveTable();
+        } catch (Exception ex) {
+            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("It worked");
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox box1;
