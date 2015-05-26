@@ -124,7 +124,6 @@ public class JFrame extends javax.swing.JFrame
         jComboBox3 = new javax.swing.JComboBox();
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jProgressBar1 = new javax.swing.JProgressBar();
@@ -294,8 +293,6 @@ public class JFrame extends javax.swing.JFrame
                 .addComponent(jButton1)
                 .addGap(18, 18, 18))
         );
-
-        jCheckBox1.setText("jCheckBox1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -584,7 +581,6 @@ public class JFrame extends javax.swing.JFrame
     private javax.swing.JDialog empPopup;
     private javax.swing.JButton jButton1;
     private org.jbundle.thin.base.screen.jcalendarbutton.JCalendarButton jCalendarButton1;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JComboBox jComboBox2;
