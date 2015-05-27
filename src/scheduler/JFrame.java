@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Date;
@@ -145,57 +146,68 @@ public class JFrame extends javax.swing.JFrame
 
     public void saveTable() throws Exception
     {
-        
+
         JFileChooser choose = new JFileChooser();
         choose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Comma Seperated Value", "csv");
         choose.setFileFilter(filter);
-        
-        int status = choose.showSaveDialog(null);
-        
-        if(status == JFileChooser.APPROVE_OPTION)
-        {
-            
-        BufferedWriter bfw = new BufferedWriter(new FileWriter(choose.getSelectedFile().getAbsolutePath() + ".csv"));
-        for (int i = 0; i < jTable1.getColumnCount(); i++)
-        {
-            bfw.write((String) jTable1.getColumnModel().getColumn(i).getHeaderValue());
-            bfw.write(",");
-        }
 
-        for (int i = 0; i < jTable1.getRowCount(); i++)
+        int status = choose.showSaveDialog(null);
+
+        if (status == JFileChooser.APPROVE_OPTION)
         {
-            bfw.newLine();
-            for (int j = 0; j < jTable1.getColumnCount(); j++)
+
+            BufferedWriter bfw = new BufferedWriter(new FileWriter(choose.getSelectedFile().getAbsolutePath() + ".csv"));
+            for (int i = 0; i < jTable1.getColumnCount(); i++)
             {
-                if (jTable1.getValueAt(i, j) == null)
+                bfw.write((String) jTable1.getColumnModel().getColumn(i).getHeaderValue());
+                bfw.write(",");
+            }
+
+            for (int i = 0; i < jTable1.getRowCount(); i++)
+            {
+                bfw.newLine();
+                for (int j = 0; j < jTable1.getColumnCount(); j++)
                 {
-                    bfw.write(" ");
-                    bfw.write(",");
-                } else
-                {
-                    bfw.write((String) jTable1.getValueAt(i, j));
-                    bfw.write(",");
+                    if (jTable1.getValueAt(i, j) == null)
+                    {
+                        bfw.write(" ");
+                        bfw.write(",");
+                    } else
+                    {
+                        bfw.write((String) jTable1.getValueAt(i, j));
+                        bfw.write(",");
+                    }
                 }
             }
+            bfw.close();
         }
-        bfw.close();
-        }  
     }
 
     public void openTable() throws FileNotFoundException, IOException
     {
-        CSVReader rowReader = new CSVReader(new FileReader("Data.csv"), ',', '\'', 1);
-        List<String[]> myEntries = rowReader.readAll();
-        String[][] dataArr = new String[myEntries.size()][];
-        dataArr = myEntries.toArray(dataArr);
 
-        CSVReader colReader = new CSVReader(new FileReader("Data.csv"));
-        String[] col = colReader.readNext();
-        DefaultTableModel dtm = new DefaultTableModel(dataArr, col);
+        JFileChooser choose = new JFileChooser();
+        choose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Comma Seperated Value", "csv");
+        choose.setFileFilter(filter);
 
-        jTable1.setModel(dtm);
+        int status = choose.showOpenDialog(null);
 
+        if (status == JFileChooser.APPROVE_OPTION)
+        {
+            CSVReader rowReader = new CSVReader(new FileReader(choose.getSelectedFile().getAbsolutePath()), ',', '\'', 1);
+            List<String[]> myEntries = rowReader.readAll();
+            String[][] dataArr = new String[myEntries.size()][];
+            dataArr = myEntries.toArray(dataArr);
+
+            CSVReader colReader = new CSVReader(new FileReader("Data.csv"));
+            String[] col = Arrays.copyOf(colReader.readNext(),
+                    colReader.readNext().length - 1);
+            DefaultTableModel dtm = new DefaultTableModel(dataArr, col);
+
+            jTable1.setModel(dtm);
+        }
     }
 
     /**
