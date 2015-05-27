@@ -5,11 +5,15 @@
  */
 package scheduler;
 
+import com.opencsv.CSVReader;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.Format;
@@ -17,10 +21,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -29,70 +35,61 @@ import javax.swing.table.TableColumnModel;
  *
  * @author Jeff
  */
-public class JFrame extends javax.swing.JFrame
-{
+public class JFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form JFrame
      */
-    public JFrame()
-    {
+    public JFrame() {
         initComponents();
         ArrayList<JCheckBox> checkedDays = createBoxArray();
 
         jTable1.setRowHeight(jTable1.getRowHeight() + 3);
-        jTable1.addMouseListener(new MouseAdapter()
-        {
+        jTable1.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent me)
-            {
+            public void mousePressed(MouseEvent me) {
                 JTable table = (JTable) me.getSource();
                 Point p = me.getPoint();
                 int row = table.rowAtPoint(p);
-                if (me.getClickCount() == 2)
-                {
+                if (me.getClickCount() == 2) {
                     empPopup.setTitle((String) jTable1.getValueAt(row, 0));
                     empPopup.setVisible(true);
                     ArrayList<Integer> l = new ArrayList();
-                    for (JCheckBox checkedDay : checkedDays)
-                    {
-                        if (checkedDay.isSelected())
+                    for (JCheckBox checkedDay : checkedDays) {
+                        if (checkedDay.isSelected()) {
                             l.add(checkedDays.indexOf(checkedDay));
+                        }
                         checkedDay.setSelected(false);
                     }
-                    
-                     WorkDay one = null;    
-                    if (jCheckBox4.isSelected() && jCheckBox5.isSelected())
-                    {
-                       one = new WorkDay(jComboBox2.getSelectedItem().toString()
-                                + " P.M."
-                                + " - " + jComboBox3.getSelectedItem().toString()
-                                + " P.M. ", 
-                               campusDrop.getSelectedItem().toString());
-                    }
-                    if (jCheckBox4.isSelected() && !jCheckBox5.isSelected())
-                    {
+
+                    WorkDay one = null;
+                    if (jCheckBox4.isSelected() && jCheckBox5.isSelected()) {
                         one = new WorkDay(jComboBox2.getSelectedItem().toString()
                                 + " P.M."
                                 + " - " + jComboBox3.getSelectedItem().toString()
-                                + " A.M. ", 
-                               campusDrop.getSelectedItem().toString());
+                                + " P.M. ",
+                                campusDrop.getSelectedItem().toString());
                     }
-                    if (!jCheckBox4.isSelected() && jCheckBox5.isSelected())
-                    {
+                    if (jCheckBox4.isSelected() && !jCheckBox5.isSelected()) {
+                        one = new WorkDay(jComboBox2.getSelectedItem().toString()
+                                + " P.M."
+                                + " - " + jComboBox3.getSelectedItem().toString()
+                                + " A.M. ",
+                                campusDrop.getSelectedItem().toString());
+                    }
+                    if (!jCheckBox4.isSelected() && jCheckBox5.isSelected()) {
                         one = new WorkDay(jComboBox2.getSelectedItem().toString()
                                 + " A.M."
                                 + " - " + jComboBox3.getSelectedItem().toString()
-                                + " P.M. ", 
-                               campusDrop.getSelectedItem().toString());
+                                + " P.M. ",
+                                campusDrop.getSelectedItem().toString());
                     }
-                    if (!jCheckBox4.isSelected() && !jCheckBox5.isSelected())
-                    {
+                    if (!jCheckBox4.isSelected() && !jCheckBox5.isSelected()) {
                         one = new WorkDay(jComboBox2.getSelectedItem().toString()
                                 + " A.M."
                                 + " - " + jComboBox3.getSelectedItem().toString()
-                                + " A.M. ", 
-                               campusDrop.getSelectedItem().toString());
+                                + " A.M. ",
+                                campusDrop.getSelectedItem().toString());
                     }
                     populateRow(jTable1, row, one, l);
 
@@ -100,8 +97,8 @@ public class JFrame extends javax.swing.JFrame
             }
         });
     }
-    private ArrayList<JCheckBox> createBoxArray()
-    {
+
+    private ArrayList<JCheckBox> createBoxArray() {
         ArrayList<JCheckBox> checkedDays = new ArrayList();
         checkedDays.add(box1);
         checkedDays.add(box2);
@@ -114,28 +111,26 @@ public class JFrame extends javax.swing.JFrame
         return checkedDays;
     }
 
-    public static Calendar DateToCalendar(Date date)
-    {
+    public static Calendar DateToCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;
     }
 
-    private void populateRow(JTable table, int rowID, WorkDay w, ArrayList<Integer> l)
-    {
-        for (Integer l1 : l)
-        {
+    private void populateRow(JTable table, int rowID, WorkDay w, ArrayList<Integer> l) {
+        for (Integer l1 : l) {
             table.setValueAt(w.time + " " + w.campus.substring(0, 4), rowID, l1 + 1);
         }
 
     }
-        public void saveTable() throws Exception {
+
+    public void saveTable() throws Exception {
         BufferedWriter bfw = new BufferedWriter(new FileWriter("Data.csv"));
         for (int i = 0; i < jTable1.getColumnCount(); i++) {
             bfw.write((String) jTable1.getColumnModel().getColumn(i).getHeaderValue());
             bfw.write(",");
         }
-        
+
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             bfw.newLine();
             for (int j = 0; j < jTable1.getColumnCount(); j++) {
@@ -144,55 +139,62 @@ public class JFrame extends javax.swing.JFrame
                     bfw.write(",");
                 } else {
                     bfw.write((String) jTable1.getValueAt(i, j));
-                    bfw.write(",");                    
+                    bfw.write(",");
                 }
-                
+
             }
         }
         bfw.close();
     }
 
+    public void openTable() throws FileNotFoundException, IOException {
+        CSVReader rowReader = new CSVReader(new FileReader("Data.csv"),',','\'',1);
+        List<String[]> myEntries = rowReader.readAll();
+        String[][] dataArr = new String[myEntries.size()][];
+        dataArr = myEntries.toArray(dataArr);
+        
+        
+        CSVReader colReader = new CSVReader(new FileReader("Data.csv"));
+        String [] col = colReader.readNext();
+        DefaultTableModel dtm = new DefaultTableModel(dataArr,col);
+        
+        jTable1.setModel(dtm);
+
+        
+
+    }
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
+        } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
+        } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(JFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
                 new JFrame().setVisible(true);
             }
         });
@@ -205,8 +207,7 @@ public class JFrame extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         empPopup = new javax.swing.JDialog();
         box1 = new javax.swing.JCheckBox();
@@ -238,6 +239,7 @@ public class JFrame extends javax.swing.JFrame
         jMenuItem3 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -266,10 +268,8 @@ public class JFrame extends javax.swing.JFrame
         jLabel2.setText("Finish:");
 
         jButton1.setText("Submit");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -311,7 +311,7 @@ public class JFrame extends javax.swing.JFrame
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox2, 0, 56, Short.MAX_VALUE)
+                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -358,12 +358,13 @@ public class JFrame extends javax.swing.JFrame
                     .addComponent(campusDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox5)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(empPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jCheckBox5)
+                        .addComponent(jLabel4)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1))
         );
@@ -372,8 +373,7 @@ public class JFrame extends javax.swing.JFrame
 
         jTable1.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {"Jose B.", null, null, null, null, null, null, null},
                 {"Anita G.", null, null, null, null, null, null, null},
                 {"Camilo C.", null, null, null, null, null, null, null},
@@ -392,19 +392,15 @@ public class JFrame extends javax.swing.JFrame
                 {"Steven R", null, null, null, null, null, null, null},
                 {"Daniel", null, null, null, null, null, null, null}
             },
-            new String []
-            {
+            new String [] {
                 "Employees", "Day 1", "Day 2 ", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"
             }
-        )
-        {
-            boolean[] canEdit = new boolean []
-            {
+        ) {
+            boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex)
-            {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
@@ -412,10 +408,8 @@ public class JFrame extends javax.swing.JFrame
         jScrollPane1.setViewportView(jTable1);
 
         jCalendarButton1.setText("Date");
-        jCalendarButton1.addPropertyChangeListener(new java.beans.PropertyChangeListener()
-        {
-            public void propertyChange(java.beans.PropertyChangeEvent evt)
-            {
+        jCalendarButton1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 jCalendarButton1PropertyChange(evt);
             }
         });
@@ -426,21 +420,27 @@ public class JFrame extends javax.swing.JFrame
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Save");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
             }
         });
         jMenu1.add(jMenuItem2);
 
         jMenuItem3.setText("Open");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem3);
         jMenu1.add(jSeparator1);
 
         jMenuItem4.setText("Print");
         jMenu1.add(jMenuItem4);
+
+        jMenuItem7.setText("Save PDF");
+        jMenu1.add(jMenuItem7);
         jMenu1.add(jSeparator2);
 
         jMenuItem5.setText("Exit");
@@ -490,8 +490,7 @@ public class JFrame extends javax.swing.JFrame
 
 
     private void jCalendarButton1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCalendarButton1PropertyChange
-        if (evt.getNewValue() instanceof Date)
-        {
+        if (evt.getNewValue() instanceof Date) {
 
             //formating the date
             SimpleDateFormat format = new SimpleDateFormat("EEE MM/dd/yyyy");
@@ -503,14 +502,12 @@ public class JFrame extends javax.swing.JFrame
             Date n = new Date(DateToStr);
             Calendar tr = DateToCalendar(n);
             ArrayList<String> cals = new ArrayList();
-            for (int i = 0; i < 6; i++)
-            {
+            for (int i = 0; i < 6; i++) {
                 tr.add(Calendar.DATE, 1);  //incrementing days by one
                 String newDate = format.format(tr.getTime());
                 cals.add(newDate);
             }
-            for (int i = 2; i < 8; i++)
-            {
+            for (int i = 2; i < 8; i++) {
                 TableColumn tc = tcm.getColumn(i);
                 tc.setHeaderValue(cals.get(i - 2));
             }
@@ -534,6 +531,15 @@ public class JFrame extends javax.swing.JFrame
         // TODO add your handling code here:
         empPopup.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        try {
+            openTable();
+        } catch (IOException ex) {
+            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("it worked");
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox box1;
@@ -565,6 +571,7 @@ public class JFrame extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
