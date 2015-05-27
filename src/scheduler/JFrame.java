@@ -201,12 +201,19 @@ public class JFrame extends javax.swing.JFrame
             String[][] dataArr = new String[myEntries.size()][];
             dataArr = myEntries.toArray(dataArr);
 
-            CSVReader colReader = new CSVReader(new FileReader("Data.csv"));
+            CSVReader colReader = new CSVReader(new FileReader(choose.getSelectedFile().getAbsolutePath()));
             String[] col = Arrays.copyOf(colReader.readNext(),
                     colReader.readNext().length - 1);
+            
+           
             DefaultTableModel dtm = new DefaultTableModel(dataArr, col);
 
+            //Setting new tableModel, frame title, and calendar text
             jTable1.setModel(dtm);
+            this.setTitle(col[1].substring(5, 9) + "-\n" + col[col.length-1].substring(5, 9));
+            jCalendarButton1.setText(col[1].substring(5, 9) + "-\n" + col[col.length-1].substring(5, 9));
+           
+            
         }
     }
 
@@ -524,11 +531,11 @@ public class JFrame extends javax.swing.JFrame
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
-                    .addComponent(jScrollPane1)))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(601, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1194, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(507, 507, 507)
                 .addComponent(jCalendarButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(414, 414, 414))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
