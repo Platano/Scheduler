@@ -10,31 +10,28 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -47,6 +44,16 @@ public class JFrame extends javax.swing.JFrame {
      */
     public JFrame() {
         initComponents();
+        try {
+            openDefault();
+        } catch (IOException ex) {
+            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                saveDefault();
+            } catch (IOException ex1) {
+                Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
         ArrayList<JCheckBox> checkedDays = createBoxArray();
 
         jTable1.setRowHeight(jTable1.getRowHeight() + 3);
@@ -133,7 +140,7 @@ public class JFrame extends javax.swing.JFrame {
             }
         } else {
             for (Integer l1 : l) {
-                table.setValueAt(w.getTime()+ " " + w.getCampus().substring(0, 4), rowID, l1 + 1);
+                table.setValueAt(w.getTime() + " " + w.getCampus().substring(0, 4), rowID, l1 + 1);
             }
         }
     }
@@ -200,6 +207,44 @@ public class JFrame extends javax.swing.JFrame {
         }
     }
 
+    private void openDefault() throws FileNotFoundException, IOException { //For default view
+        CSVReader rowReader = new CSVReader(new FileReader("default.csv"), ',', '\'', 1);
+        List<String[]> myEntries = rowReader.readAll();
+        String[][] dataArr = new String[myEntries.size()][];
+        dataArr = myEntries.toArray(dataArr);
+
+        CSVReader colReader = new CSVReader(new FileReader("default.csv"));
+        String[] col = Arrays.copyOf(colReader.readNext(),
+                colReader.readNext().length - 1);
+
+        DefaultTableModel dtm = new DefaultTableModel(dataArr, col);
+
+        jTable1.setModel(dtm);
+    }
+
+    private void saveDefault() throws IOException {
+        BufferedWriter bfw = new BufferedWriter(new FileWriter("default.csv"));
+        for (int i = 0; i < jTable1.getColumnCount(); i++) {
+            bfw.write((String) jTable1.getColumnModel().getColumn(i).getHeaderValue());
+            bfw.write(",");
+        }
+
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            bfw.newLine();
+            for (int j = 0; j < jTable1.getColumnCount(); j++) {
+                if (jTable1.getValueAt(i, j) == null) {
+                    bfw.write(" ");
+                    bfw.write(",");
+                } else {
+                    bfw.write((String) jTable1.getValueAt(i, j));
+                    bfw.write(",");
+                }
+            }
+        }
+        bfw.close();
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -237,6 +282,7 @@ public class JFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new JFrame().setVisible(true);
+
             }
         });
     }
@@ -285,6 +331,7 @@ public class JFrame extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
 
         empPopup.setTitle("Work Days");
         empPopup.setMinimumSize(new java.awt.Dimension(410, 175));
@@ -496,7 +543,20 @@ public class JFrame extends javax.swing.JFrame {
         jMenu2.setText("Edit");
 
         jMenuItem6.setText("New Employee");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem6);
+
+        jMenuItem8.setText("Remove Employee");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem8);
 
         jMenuBar1.add(jMenu2);
 
@@ -571,7 +631,7 @@ public class JFrame extends javax.swing.JFrame {
             Logger.getLogger(JFrame.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("It worked");
+
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
@@ -588,12 +648,38 @@ public class JFrame extends javax.swing.JFrame {
             Logger.getLogger(JFrame.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("it worked");
+
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        String name = JOptionPane.showInputDialog(this, "What is their name?");
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{name});
+        try {
+            saveDefault();
+        } catch (IOException ex) {
+            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int[] rows = jTable1.getSelectedRows();
+        for (int i = 0; i < rows.length; i++) {
+            model.removeRow(rows[i] - i);
+        }
+        try {
+            saveDefault();
+        } catch (IOException ex) {
+            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox box1;
@@ -625,6 +711,7 @@ public class JFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
@@ -632,4 +719,5 @@ public class JFrame extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
 }
