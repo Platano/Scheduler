@@ -127,7 +127,7 @@ public class JFrame extends javax.swing.JFrame {
     }
 
     private void populateRow(JTable table, int rowID, WorkDay w, ArrayList<Integer> l) {
-        if (w.getTime() == null && w.getTime().isEmpty()) {
+        if (w.getTime() == null) {
             for (Integer l1 : l) {
                 table.setValueAt(w.getCampus(), rowID, l1 + 1);
             }
